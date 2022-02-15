@@ -3,12 +3,16 @@ import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from "../logo.png";
+import { Link } from "react-router-dom";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
+  { name: "Your Collections", href: "/collections", current: false },
+  {
+    name: "OpenSea",
+    href: `https://testnets.opensea.io/collection/existence-v3`,
+    current: false,
+  },
+  { name: "UsefullV2 (soon)", href: "#", current: false },
 ];
 
 function classNames(...classes) {
@@ -20,7 +24,7 @@ export default function Header() {
     <Disclosure as="nav" className="bg-gray-200 rounded-md shadow-md">
       {({ open }) => (
         <>
-          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 shadow-md">
             <div className="relative flex items-center justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
@@ -35,34 +39,54 @@ export default function Header() {
               </div>
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  <img
-                    className="block lg:hidden h-8 w-auto"
-                    src={logo}
-                    alt="Workflow"
-                  />
-                  <img
-                    className="hidden lg:block h-8 w-auto"
-                    src={logo}
-                    alt="Workflow"
-                  />
+                  <Link to="/">
+                    <img
+                      className="block lg:hidden h-8 w-auto"
+                      src={logo}
+                      alt="Workflow"
+                    />
+                    <img
+                      className="hidden lg:block h-8 w-auto"
+                      src={logo}
+                      alt="Workflow"
+                    />
+                  </Link>
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-orange-200 text-gray-600"
-                            : "text-gray-600 hover:bg-orange-200 hover:text-gray-600",
-                          "px-3 py-2 rounded-md text-sm font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    {navigation.map((item) =>
+                      item.name !== "OpenSea" ? (
+                        <Link to={item.href}>
+                          <a
+                            key={item.name}
+                            className={classNames(
+                              item.current
+                                ? "bg-orange-200 text-gray-600"
+                                : "text-gray-600 hover:bg-orange-200 hover:text-gray-600",
+                              "px-3 py-2 rounded-md text-sm font-medium"
+                            )}
+                            aria-current={item.current ? "page" : undefined}
+                          >
+                            {item.name}
+                          </a>
+                        </Link>
+                      ) : (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          target="_blank"
+                          className={classNames(
+                            item.current
+                              ? "bg-orange-200 text-gray-600"
+                              : "text-gray-600 hover:bg-orange-200 hover:text-gray-600",
+                            "px-3 py-2 rounded-md text-sm font-medium"
+                          )}
+                          aria-current={item.current ? "page" : undefined}
+                        >
+                          {item.name}
+                        </a>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -76,7 +100,7 @@ export default function Header() {
                 </button>
 
                 {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
+                {/* <Menu as="div" className="ml-3 relative">
                   <div>
                     <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
@@ -138,7 +162,7 @@ export default function Header() {
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
-                </Menu>
+                </Menu> */}
               </div>
             </div>
           </div>
