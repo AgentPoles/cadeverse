@@ -85,9 +85,9 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header></Header>
-      <div>
+      <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
