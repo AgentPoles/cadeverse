@@ -10,6 +10,8 @@ const navigation = [
   { name: "Your Collections", href: "/collections", current: false },
 
   { name: "UsefullV2 (soon)", href: "#", current: false },
+  { name: "Integrate (soon)", href: "#", current: false },
+  { name: "Docs (soon)", href: "#", current: false },
 ];
 
 const OpenSeaAddress = "https://testnets.opensea.io/collection/existence-v3";
