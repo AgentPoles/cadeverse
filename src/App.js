@@ -15,6 +15,7 @@ import Collections from "./pages/Collections";
 const App = () => {
   // Import the functions you need from the SDKs you need
   let navigate = useNavigate();
+
   const [nft, setNft] = useState({
     image: "",
     name: "",
@@ -45,50 +46,61 @@ const App = () => {
       position: toast.POSITION.BOTTOM_CENTER,
     });
 
-    const storageRef = ref(storage, nft.image_name);
-
     // 'file' comes from the Blob or File API
-    uploadBytes(storageRef, nft.image).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-      getDownloadURL(storageRef)
-        .then((res) => {
-          setNft({ ...nft, image: res });
-          toast.update(id, {
-            render: <ToastContent text={"stored successfully"} />,
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-            position: toast.POSITION.BOTTOM_CENTER,
-          });
-          navigate("/mint");
-        })
-        .catch((e) =>
-          toast.update(id, {
-            render: <ToastContent text={`failed to store due to ${e}`} />,
-            type: "error",
-            isLoading: false,
-            autoClose: 2000,
-            position: toast.POSITION.BOTTOM_CENTER,
+    try {
+      const storageRef = ref(storage, nft.image_name);
+      uploadBytes(storageRef, nft.image).then((snapshot) => {
+        console.log("Uploaded a blob or file!");
+        getDownloadURL(storageRef)
+          .then((res) => {
+            setNft({ ...nft, image: res });
+            toast.update(id, {
+              render: <ToastContent text={"stored successfully"} />,
+              type: "success",
+              isLoading: false,
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_CENTER,
+            });
+            navigate("/mint");
           })
-        );
-    });
+          .catch((e) =>
+            toast.update(id, {
+              render: <ToastContent text={`failed to store due to ${e}`} />,
+              type: "error",
+              isLoading: false,
+              autoClose: 5000,
+              position: toast.POSITION.BOTTOM_CENTER,
+            })
+          );
+      });
+    } catch (error) {
+      toast.update(id, {
+        render: <ToastContent text={`failed to store due to ${e}`} />,
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+        position: toast.POSITION.BOTTOM_CENTER,
+      });
+    }
   };
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header></Header>
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/makenft"
+            exact
+            element={<MakeNft buttonFunction={proceed} />}
+          />
+          <Route path="/mint" exact element={<Finish nft={nft} />} />
+          <Route path="/collections" exact element={<Collections />} />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/makenft"
-          exact
-          element={<MakeNft buttonFunction={proceed} />}
-        />
-        <Route path="/mint" exact element={<Finish nft={nft} />} />
-        <Route path="/collections" exact element={<Collections />} />
-        {/* <Redirect from="*" to="/" /> */}
-      </Routes>
+          {/* <Redirect from="*" to="/" /> */}
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

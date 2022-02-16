@@ -45,6 +45,20 @@ export default function Finish({ nft }) {
   const [currenttoken, setCurrentToken] = useState(null);
   const generaldone = "text-pink-500  bg-orange-100 border-pink-500";
 
+  const showError = (text) => {
+    toast.error(<ToastContent text={text} />, {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 5000,
+    });
+  };
+
+  const showSuccess = (text) => {
+    toast.success(<ToastContent text={text} />, {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 2000,
+    });
+  };
+
   const checkIfWalletIsConnected = async () => {
     try {
       if (window.ethereum) {
@@ -59,8 +73,11 @@ export default function Finish({ nft }) {
         // showMessageDefault();
         // setError("Please install a MetaMask wallet to use the Dao.");
         console.log("No Metamask detected");
+        showError("No metamask detected");
       }
-    } catch (error) {}
+    } catch (error) {
+      showError(`could not connect wallet because of ${error}`);
+    }
   };
 
   const getLatestId = async () => {
@@ -81,6 +98,7 @@ export default function Finish({ nft }) {
       }
     } catch (error) {
       console.log(error);
+      showError(`failed to get opensea id because of error: ${error}`);
     }
   };
 

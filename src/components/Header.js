@@ -4,16 +4,15 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from "../logo.png";
 import { Link } from "react-router-dom";
+import opensea from "../images/openss.png";
 
 const navigation = [
   { name: "Your Collections", href: "/collections", current: false },
-  {
-    name: "OpenSea",
-    href: `https://testnets.opensea.io/collection/existence-v3`,
-    current: false,
-  },
+
   { name: "UsefullV2 (soon)", href: "#", current: false },
 ];
+
+const OpenSeaAddress = "https://testnets.opensea.io/collection/existence-v3";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -54,50 +53,49 @@ export default function Header() {
                 </div>
                 <div className="hidden sm:block sm:ml-6">
                   <div className="flex space-x-4">
-                    {navigation.map((item) =>
-                      item.name !== "OpenSea" ? (
-                        <Link to={item.href}>
-                          <a
-                            key={item.name}
-                            className={classNames(
-                              item.current
-                                ? "bg-orange-200 text-gray-600"
-                                : "text-gray-600 hover:bg-orange-200 hover:text-gray-600",
-                              "px-3 py-2 rounded-md text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        </Link>
-                      ) : (
+                    {navigation.map((item) => (
+                      <Link to={item.href}>
                         <a
                           key={item.name}
-                          href={item.href}
-                          target="_blank"
                           className={classNames(
                             item.current
-                              ? "bg-orange-200 text-gray-600"
-                              : "text-gray-600 hover:bg-orange-200 hover:text-gray-600",
+                              ? "bg-gradient-to-r from-pink-700 to-gray-500 hover:text-white"
+                              : "text-gray-600 hover:bg-gradient-to-r from-pink-700 to-gray-500 hover:text-white",
                             "px-3 py-2 rounded-md text-sm font-medium"
                           )}
                           aria-current={item.current ? "page" : undefined}
                         >
                           {item.name}
                         </a>
-                      )
-                    )}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <button
+                <a
+                  href={OpenSeaAddress}
+                  target="_blank"
+                  className="bg-zinc-200 rounded p-1 "
+                >
+                  <button className="bg-gradient-to-r from-pink-700 to-orange-500 text-transparent bg-clip-text font-extrabold">
+                    Opensea
+                    <img
+                      src={opensea}
+                      alt="opensea logo"
+                      className="h-9 ml-2"
+                      style={{ display: "inline" }}
+                    />
+                  </button>
+                </a>
+
+                {/* <button
                   type="button"
-                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                  className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ml-5"
                 >
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
+                </button> */}
 
                 {/* Profile dropdown */}
                 {/* <Menu as="div" className="ml-3 relative">

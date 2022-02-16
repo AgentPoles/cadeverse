@@ -21,6 +21,7 @@
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
+    "react-shimmer": "^3.2.0",
     "react-spring": "^9.4.2",
     "react-toastify": "^8.2.0",
     "react-use-gesture": "^9.1.3",

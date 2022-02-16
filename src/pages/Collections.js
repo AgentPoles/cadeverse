@@ -5,7 +5,7 @@ import IdentityCollections from "../components/Identities";
 import abi from "../contracts/NFT.json";
 import { toast } from "react-toastify";
 import ToastContent from "../components/ToastContent";
-import existlogo from "../images/exist.PNG";
+import { Shimmer } from "react-shimmer";
 
 let idb;
 
@@ -16,6 +16,21 @@ const Collections = () => {
   const [userAddress, setUserAddress] = useState(null);
   const [collection, setUserCollection] = useState(null);
   const [identities, setIdentities] = useState(null);
+  const [retrieved, setRetrieved] = useState(false);
+
+  const showError = (text) => {
+    toast.error(<ToastContent text={text} />, {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 5000,
+    });
+  };
+
+  const showSuccess = (text) => {
+    toast.success(<ToastContent text={text} />, {
+      position: toast.POSITION.TOP_LEFT,
+      autoClose: 2000,
+    });
+  };
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -30,9 +45,11 @@ const Collections = () => {
       } else {
         // showMessageDefault();
         // setError("Please install a MetaMask wallet to use the Dao.");
-        console.log("No Metamask detected");
+        showError("no metamask detected");
       }
-    } catch (error) {}
+    } catch (error) {
+      showError(`wallet connection failed due to ${error}`);
+    }
   };
   const getUserCollection = async () => {
     try {
@@ -54,13 +71,7 @@ const Collections = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.update(idb, {
-        render: <ToastContent text={`failed to fetch due to ${error}`} />,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
+      showError(`this error occured: ${error}`);
     }
   };
 
@@ -80,13 +91,7 @@ const Collections = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.update(idb, {
-        render: <ToastContent text={`failed to fetch due to ${error}`} />,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
+      showError(`this error occured: ${error}`);
     }
   };
 
@@ -131,21 +136,9 @@ const Collections = () => {
 
       console.log(identitiese);
       setIdentities(identitiese);
-      toast.update(idb, {
-        render: <ToastContent text={`finished fecthing`} />,
-        type: "success",
-        isLoading: false,
-        autoClose: 2000,
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
+      setRetrieved(true);
     } catch (error) {
-      toast.update(idb, {
-        render: <ToastContent text={`failed to fetch due to ${error}`} />,
-        type: "error",
-        isLoading: false,
-        autoClose: 5000,
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
+      showError(`this error occured - ${error}`);
     }
   };
   useEffect(() => {
@@ -155,7 +148,8 @@ const Collections = () => {
 
   return (
     <div>
-      {identities !== null && identities.length > 0 ? (
+      {!retrieved && <Shimmer width={800} height={600} />}
+      {identities !== null && identities.length !== 0 ? (
         <IdentityCollections products={identities} />
       ) : (
         <CollectionsLoader></CollectionsLoader>
