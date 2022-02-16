@@ -67,8 +67,9 @@ export default function MakeNft({ buttonFunction }) {
               <p className="mt-1 text-sm text-gray-600">
                 You do great with graphics? Then make an art work depicting a
                 person and push to `Existence`. This art work would be someone's
-                identity in the metaverse and you get commissions for any
-                financial or socially profitable action this identity makes
+                identity on web3 and in the metaverse and you'll get commissions
+                for any financial or socially profitable action this identity
+                makes
               </p>
             </div>
           </div>
