@@ -1,4 +1,4 @@
-import eicon from "../images/exist.png";
+import eicon from "../images/existe.png";
 const ToastContent = ({ text }) => (
   <div style={{ display: "inline" }}>
     <img
