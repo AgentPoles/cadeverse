@@ -21,6 +21,7 @@ export default function MakeNft({ buttonFunction }) {
   const [identity, setIdentity] = useState();
   const [imagefile, setImageFile] = useState();
   const [imagepath, setImagePath] = useState("");
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const [file, setFile] = useState(null);
 
@@ -38,6 +39,11 @@ export default function MakeNft({ buttonFunction }) {
     description: "",
     image: "",
     image_name: "",
+    attributes: [
+      {
+        private: isPrivate,
+      },
+    ],
   });
 
   const onChange = (e) => {
@@ -52,6 +58,9 @@ export default function MakeNft({ buttonFunction }) {
     // console.log(nft);
   };
 
+  const onCheckedClicked = (e) => {
+    setNft({ ...nft, attributes: [{ private: e.target.checked }] });
+  };
   const onTextChange = (e) => {
     setNft({ ...nft, [e.target.name]: e.target.value });
   };
@@ -179,6 +188,21 @@ export default function MakeNft({ buttonFunction }) {
                         }}
                       />
                     </div>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-pink-600 checked:border-pink-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                      type="checkbox"
+                      value=""
+                      id="flexCheckDefault"
+                      onClick={(e) => onCheckedClicked(e)}
+                    />
+                    <label
+                      class="form-check-label inline-block text-gray-800"
+                      for="flexCheckDefault"
+                    >
+                      Make Private
+                    </label>
                   </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">

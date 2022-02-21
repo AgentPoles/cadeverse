@@ -11,6 +11,7 @@ import storage from "./storage/firebasefile";
 import { toast } from "react-toastify";
 import ToastContent from "./components/ToastContent";
 import Collections from "./pages/Collections";
+import PublicCollections from "./pages/PublicCollections";
 
 const App = () => {
   // Import the functions you need from the SDKs you need
@@ -41,7 +42,7 @@ const App = () => {
       });
       return;
     }
-
+    console.log(nft);
     const id = toast.loading(<ToastContent text={"storing image..."} />, {
       position: toast.POSITION.BOTTOM_CENTER,
     });
@@ -97,7 +98,11 @@ const App = () => {
           />
           <Route path="/mint" exact element={<Finish nft={nft} />} />
           <Route path="/collections" exact element={<Collections />} />
-
+          <Route
+            path="/publiccollections"
+            exact
+            element={<PublicCollections />}
+          />
           {/* <Redirect from="*" to="/" /> */}
         </Routes>
       </div>

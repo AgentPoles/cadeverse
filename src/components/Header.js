@@ -8,7 +8,7 @@ import opensea from "../images/openss.png";
 
 const navigation = [
   { name: "Your Collections", href: "/collections", current: false },
-
+  { name: "Public Collections", href: "/publiccollections", current: false },
   { name: "UsefullV2 (soon)", href: "#", current: false },
   { name: "Integrate (soon)", href: "#", current: false },
   { name: "Docs (soon)", href: "#", current: false },

@@ -9,7 +9,7 @@ import { Shimmer } from "react-shimmer";
 
 let idb;
 
-const Collections = () => {
+const PublicCollections = () => {
   const contractAddress = "0x30D87625b9991Cf5a28cf89d8AEb897A49987488";
   const contractABI = abi.abi;
   const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -51,7 +51,8 @@ const Collections = () => {
       showError(`wallet connection failed due to ${error}`);
     }
   };
-  const getUserCollection = async () => {
+
+  const getLatestTokenId = async () => {
     try {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -62,19 +63,15 @@ const Collections = () => {
           signer
         );
 
-        let collection = await ExistenceContract.getCollection();
-
-        setUserCollection(collection.toString());
-        if (collection.toString() !== null) {
-          processCollection(collection.toString());
-        }
+        let latestId = await ExistenceContract.getCurrentTokenId();
+        let StringifiedId = latestId.toString();
+        return StringifiedId;
       }
     } catch (error) {
       console.log(error);
       showError(`this error occured: ${error}`);
     }
   };
-
   const getTokeUrle = async (tokenId) => {
     try {
       if (window.ethereum) {
@@ -95,24 +92,27 @@ const Collections = () => {
     }
   };
 
-  const processCollection = async (collection) => {
+  const processpublic = async () => {
     try {
-      let array = collection.split(",");
-      let identitiese = [];
+      let idString = await getLatestTokenId();
+      let id = parseInt(idString, 10);
 
-      const urlArray = await Promise.all(
-        array.map((item) => {
-          if (item !== "") {
-            let id = parseInt(item, 10);
-            return getTokeUrle(id);
-          } else {
-            return "";
-          }
+      let tokenIds = [];
+      let identitiese = [];
+      let identitiesb = [];
+
+      for (let i = 1; i <= id; i++) {
+        tokenIds.push(i);
+      }
+
+      const tokenUrls = await Promise.all(
+        tokenIds.map((item) => {
+          return getTokeUrle(item);
         })
       );
 
       const datas = await Promise.all(
-        urlArray.map((item) => {
+        tokenUrls.map((item) => {
           if (item !== "") {
             const response = fetch(`https://ipfs.io/ipfs/${item}`)
               .then((res) => res.text())
@@ -125,7 +125,7 @@ const Collections = () => {
         })
       );
 
-      const list = datas.filter((item) => {
+      datas.filter((item) => {
         if (item !== "") {
           const itema = JSON.parse(item);
           identitiese.push(JSON.parse(item));
@@ -134,8 +134,19 @@ const Collections = () => {
         }
       });
 
+      identitiese.map((item) => {
+        if (item.hasOwnProperty("attributes") === false) {
+          identitiesb.push(item);
+        } else {
+          if (item.attributes[0].private === false) {
+            identitiesb.push(item);
+          }
+        }
+      });
+      console.log(idString);
       console.log(identitiese);
-      setIdentities(identitiese);
+      console.log(identitiesb);
+      setIdentities(identitiesb);
       setRetrieved(true);
     } catch (error) {
       showError(`this error occured - ${error}`);
@@ -143,14 +154,14 @@ const Collections = () => {
   };
   useEffect(() => {
     checkIfWalletIsConnected();
-    getUserCollection();
+    processpublic();
   }, [isWalletConnected]);
 
   return (
     <div>
       {!retrieved && <Shimmer width={800} height={600} />}
       {identities !== null && identities.length !== 0 ? (
-        <IdentityCollections products={identities} text={"Your Collections"} />
+        <IdentityCollections products={identities} text={"Public Identities"} />
       ) : (
         <CollectionsLoader></CollectionsLoader>
       )}
@@ -172,4 +183,4 @@ const CollectionsLoader = () => {
   );
 };
 
-export default Collections;
+export default PublicCollections;
